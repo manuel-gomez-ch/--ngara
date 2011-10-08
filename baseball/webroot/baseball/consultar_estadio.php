@@ -1,3 +1,4 @@
+<?php include "config.php"; ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
@@ -27,26 +28,51 @@
                                                 <div id="title">
                                                         <h2 class="hidden">Indice</h2>
                                                 </div>
-                                                <center>
-                                                        <div id="description" >
-
-                                                                <div class="menu_elem">
-                                                                        <a href="consultar_equipo.php" class="link_hide">Por Equipo</a>
-                                                                </div>
-
-                                                                <div class="menu_elem">
-                                                                        <a href="consultar_juego.php" class="link_hide">Por Juego</a>
-                                                                </div>
-
-                                                                <div class="menu_elem">
-                                                                        <a href="consultar_estadio.php" class="link_hide">Por Estadio</a>
-                                                                </div>
-                                                        </div>
-                                                </center>
+                                                <div id="description">
+                                                </div>
                                         </div>
                                         <div id="content-right">
                                                 <div id="main">
+                                                        <p>Estadios:</p>
+<?php
+$query = <<<EOF
+        SELECT
+                "Estadio"."nombre"           AS a1,
+                "Estadio"."ciudad"           AS a2,
+                "Estadio"."estado"           AS a3,
+                "Estadio"."capacidad"        AS a4,
+                "Estadio"."tipo de terreno"  AS a5,
+                "Estadio"."año de fundación" AS a6
+        FROM
+                "Estadio",
+                "Tipo de terreno"
+        WHERE
+                "Estadio"."tipo de terreno" = "Tipo de terreno"."id"
+EOF;
 
+$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+
+echo "<table border=\"1\">\n   ";
+echo "<tr>                     ";
+echo "<th>Nombre</th>          ";
+echo "<th>Ciudad</th>          ";
+echo "<th>Estado</th>          ";
+echo "<th>Capacidad</th>       ";
+echo "<th>Tipo de terreno</th> ";
+echo "<th>Año de fundación</th>";
+echo "</tr>\n                  ";
+while ($row = pg_fetch_row($result, null, PGSQL_ASSOC)) {
+        echo "<tr>\n";
+        foreach ($row as $col_value) {
+                echo "<td>$col_value</td>\n";
+        }
+        echo "</tr>\n";
+}
+echo "</table>\n               ";
+
+pg_free_result($result);
+pg_close($dbconn);
+?>
                                                 </div>
                                         </div>
                                 </div>

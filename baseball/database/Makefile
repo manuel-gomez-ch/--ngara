@@ -1,24 +1,28 @@
-setup:
-	psql -f setup.sql
+all: create password schema load perm
 
-delete:
-	psql -f delete.sql "Baseball"
+create:
+	psql -f create.sql
 
-truncate:
-	psql -f truncate.sql "Baseball"
-
-drop:
-	psql -f drop.sql "Baseball"
-
-load:
-	psql -f load.sql "Baseball"
-
-perms:
-	psql -f perms.sql "Baseball"
-
-sample:
-	psql -f sample.sql "Baseball"
+password:
+	psql -f password.sql
 
 schema:
 	psql -f schema.sql "Baseball"
 
+load:
+	psql -f load.sql "Baseball"
+
+sample:
+	psql -f sample.sql "Baseball"
+
+perm:
+	psql -f perm.sql "Baseball"
+
+truncate:
+	psql -f truncate.sql "Baseball"
+
+delete:
+	psql -f delete.sql "Baseball"
+
+distclean:
+	psql -f distclean.sql
